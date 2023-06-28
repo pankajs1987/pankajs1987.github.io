@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import AssetItemDetails from "./AssetItemDetails";
 import { useEffect } from "react";
 import Loader from "../UI/Loader";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../config/firebase'; 
 
 import { Paper, makeStyles, Toolbar, InputAdornment } from "@material-ui/core";
 
@@ -61,6 +63,20 @@ const Assets = (props) => {
   };
 
   useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        // ...
+        console.log("uid", uid)
+      } else {
+        // User is signed out
+        // ...
+        console.log("user is logged out")
+      }
+    });
+
     const fetchRateOfInterest = async () => {
       const response = await fetch(
         "https://dailytransactions-99473-default-rtdb.firebaseio.com/ROI.json"
